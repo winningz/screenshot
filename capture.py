@@ -1,6 +1,23 @@
 import tkinter as tk
+from PIL import ImageGrab
+import time
 
 bbox = None  # 캡처 영역 초기값
+
+def screenshot():
+    global bbox
+    if bbox is None:
+        print("캡처 영역이 설정되지 않았습니다.")
+        return
+
+    curr_time = time.strftime("_%Y%m%d_%H%M%S")
+    filename = f"image{curr_time}.png"
+    try:
+        img = ImageGrab.grab(bbox=bbox)
+        img.save(filename)
+        print(f"스크린샷 저장 완료: {filename}")
+    except Exception as e:
+        print(f"스크린샷 저장 실패: {e}")
 
 # GUI로 영역 설정
 def select_area():
@@ -45,6 +62,9 @@ def main():
     # 캡처 영역 선택 버튼
     btn_select_area = tk.Button(root, text="1. 캡처 영역 선택", command=select_area, font=("Arial", 12))
     btn_select_area.pack(pady=10)
+
+    btn_screenshot = tk.Button(root, text="스크린샷 저장", command=screenshot, font=("Arial", 12))
+    btn_screenshot.pack(pady=10)
 
     # 텍스트 박스 추가
     lbl_textbox = tk.Label(root, text="2. 자유 메모 공간:", font=("Arial", 12))
