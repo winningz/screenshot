@@ -4,6 +4,21 @@ import time
 
 bbox = None  # 캡처 영역 초기값
 
+def save_text(text_widget):
+    text_content = text_widget.get("1.0", tk.END).strip()
+    if not text_content:
+        print("텍스트 박스에 내용이 없습니다.")
+        return
+
+    curr_time = time.strftime("_%Y%m%d_%H%M%S")
+    filename = f"note{curr_time}.txt"
+    try:
+        with open(filename, "w", encoding="utf-8") as file:
+            file.write(text_content)
+        print(f"텍스트 저장 완료: {filename}")
+    except Exception as e:
+        print(f"텍스트 저장 실패: {e}")
+
 def screenshot():
     global bbox
     if bbox is None:
@@ -72,6 +87,9 @@ def main():
 
     text_box = tk.Text(root, height=8, width=50, font=("Consolas", 12), wrap="word", bd=2, relief="solid")
     text_box.pack(pady=10, padx=10)
+
+    btn_save_text = tk.Button(root, text="텍스트 저장", command=lambda: save_text(text_box), font=("Arial", 12))
+    btn_save_text.pack(pady=10)
 
     root.mainloop()
 
